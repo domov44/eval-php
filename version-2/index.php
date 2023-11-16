@@ -1,15 +1,8 @@
-<?php
-require_once 'class/Convert.php';
-
-$convert = new Convert();
-
-?>
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Convertir un fichier CSV en JSON</title>
+    <title>Convertir un fichier en JSON</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
@@ -17,14 +10,19 @@ $convert = new Convert();
     <main>
         <section>
             <form action="telechargement.php" name="form" method="post" enctype="multipart/form-data">
+                <label for="fileType">Choisissez le type de fichier :</label>
+                <select name="fileType" id="fileType">
+                    <?php
+                    require_once 'class/Choice.php';
+                    $choice = new Choice();
+
+                    foreach ($choice->getOptions() as $option) {
+                        echo "<option value='$option'>$option</option>";
+                    }
+                    ?>
+                </select>
                 <input type="file" name="file" required />
-                <input type="submit" name="submit" value="Convertir en json" />
-            </form>
-        </section>
-        <section>
-            <form action="telechargementxml.php" name="form" method="post" enctype="multipart/form-data">
-                <input type="file" name="filexml" required />
-                <input type="submit" name="submit" value="Convertir en json" />
+                <input type="submit" name="submit" value="Convertir en JSON" />
             </form>
         </section>
     </main>

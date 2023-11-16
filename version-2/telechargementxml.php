@@ -1,11 +1,10 @@
 <?php
 $xmlFile = $_FILES['filexml']['tmp_name'];
-$xmlBrut = file_get_contents($xmlFile, 'r');
-$xmlSpace = explode("\n", $xmlBrut);
-$xmlContent = array_map("str_getcsv", $xmlSpace);
-$xmlJsonEncode = json_encode($xmlContent, JSON_PRETTY_PRINT);
+$xml = simplexml_load_file($xmlFile);
+$xmlArray = json_decode(json_encode($xml), true);
+$xmlJsonEncode = json_encode($xmlArray, JSON_PRETTY_PRINT);
+
 $newFile = str_replace(".xml", "", $_FILES['filexml']['name']) . ".json";
-var_dump($newFile);
 
 ?>
 <!DOCTYPE html>
@@ -18,14 +17,12 @@ var_dump($newFile);
 <body>
   <?php
   if (file_put_contents("uploads/" . $newFile, $xmlJsonEncode)) {
-    echo "  <h1>Votre fichier json est prêt</h1> 
+    echo "<h1>Votre fichier JSON est prêt</h1> 
     <a href='uploads/$newFile' download>Télécharger</a>";
-  }
-
-  else {
-    echo "<h1>Il y'a eu un problème...</h1>";
+  } else {
+    echo "<h1>Il y a eu un problème...</h1>";
   }
   ?>
-  <a href="/eval-php/index.php">Convertir un autre fichier CSV en JSON</a>
+  <a href="/eval-php/index.php">Convertir un autre fichier XML en JSON</a>
 </body>
 </html>

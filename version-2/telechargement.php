@@ -1,30 +1,33 @@
 <?php
-$csvFile = $_FILES['file']['tmp_name'];
-$csvBrut = file_get_contents($csvFile, 'r');
-$csvSpace = explode("\n", $csvBrut);
-$csvContent = array_map("str_getcsv", $csvSpace);
-$csvJsonEncode = json_encode($csvContent, JSON_PRETTY_PRINT);
-$newFile = str_replace(".csv", "", $_FILES['file']['name']) . ".json";
+require_once 'class/Convert.php';
+require_once 'class/Choice.php';
 
+$convert = new Convert();
+$choice = new Choice();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $fileType = $_POST['fileType'];
+
+    if ($fileType === 'csv') {
+        $file = $_FILES['file']['tmp_name'];
+        $jsonEncode = $convert->convertCsvToJson($file);
+        $newFile = str_replace(".csv", "", $_FILES['file']['name']) . ".json";
+    } elseif ($fileType === 'xml') {
+        $file = $_FILES['file']['tmp_name'];
+        $jsonEncode = $convert->convertXmlToJson($file);
+        $newFile = str_replace(".xml", "", $_FILES['file']['name']) . ".json";
+    }
+
+    if (file_put_contents("uploads/" . $newFile, $jsonEncode)) {
+        echo "<h1>Votre fichier JSON est prêt</h1> 
+        <a href='uploads/$newFile' download>Télécharger</a>
+        <a href='/eval-php/version-2/index.php'>Convertir un autre fichier</a>";
+        exit;
+    } else {
+        echo "<h1>Il y a eu un problème...</h1>";
+    }
+} else {
+    echo "<h1>Accès non autorisé</h1>";
+}
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Téléchargez votre fichier json</title>
-</head>
-<body>
-  <?php
-  if (file_put_contents("uploads/" . $newFile, $csvJsonEncode)) {
-    echo "  <h1>Votre fichier json est prêt</h1> 
-    <a href='uploads/$newFile' download>Télécharger</a>";
-  }
 
-  else {
-    echo "<h1>Il y'a eu un problème...</h1>";
-  }
-  ?>
-  <a href="/eval-php/index.php">Convertir un autre fichier CSV en JSON</a>
-</body>
-</html>
