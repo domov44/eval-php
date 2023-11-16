@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 
@@ -8,10 +7,13 @@
 </head>
 
 <body>
-  <form name="form" method="post" action="telechargement.php" enctype="multipart/form-data">
-    <input type="file" name="file" required />
-    <input type="submit" name="submit" value="Convertir en json" />
-  </form>
+  <main>
+    <section>
+      <form action="telechargement.php" name="form" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" required />
+        <input type="submit" name="submit" value="Convertir en json" />
+      </form>
+    </section>
+  </main>
 </body>
-
 </html>
