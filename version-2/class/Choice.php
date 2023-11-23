@@ -1,13 +1,12 @@
 <?php
 
-class Choice
-{
-    private $options = ['csv', 'xml'];
+class Choice{
+    public string $value;
+    public string $label;
 
-    public function getOptions()
-    {
-        return $this->options;
+    public function __construct( string $value, string $label){
+        $this->value = $value;
+        $this->label = $label;
     }
 }
-
 ?>
